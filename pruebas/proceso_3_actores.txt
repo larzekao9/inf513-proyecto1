@@ -1,0 +1,98 @@
+# =====================================================================
+# Proceso completo de Canal 11 con los 3 actores del sistema.
+#   ADMIN  = jtorricoavila@gmail.com            ADMINISTRADOR  (Programacion: parrilla, programas, materiales, pautas, spots)
+#   PRENSA = jtorricoavila+prensa@gmail.com     ENCARGADO      (aprueba o rechaza materiales y arma la escaleta)
+#   PROD   = jtorricoavila+produccion@gmail.com PRODUCCION     (registra lo que salio al aire)
+#
+# Cada linea es "remitente | asunto". Para la demostracion real, cada asunto se envia por correo a
+# grupo12sa@tecnoweb.org.bo desde el remitente indicado (los +alias se configuran en Gmail: "Enviar como").
+#
+# Tambien se puede ejecutar de una vez con:  scripts\ejecutar.bat --lote pruebas\proceso_3_actores.txt
+#   OJO: --lote escribe en la base configurada en config.properties (la del curso) y las lineas @ahora
+#   simulan la hora (10:00 para armar la parrilla y 23:40 para registrar la emision). Solo se puede correr
+#   una vez: la segunda, los registros ya existen.
+#
+# Probado completo (58 comandos OK) sobre una copia de la base del servidor del curso.
+# =====================================================================
+@ahora 2026-11-20T10:00
+
+# Paso previo: el Administrador actual del servidor registra a jtorricoavila (si ya esta registrado, omitir)
+larzekaobnc@gmail.com | insUsu["9876543","J","Torrico","jtorricoavila@gmail.com","","ADMINISTRADOR"]
+
+# Fase 1 - Usuarios y roles (CU1)
+jtorricoavila@gmail.com | help
+jtorricoavila@gmail.com | insUsu["9876544","Jefe","Prensa","jtorricoavila+prensa@gmail.com","","ENCARGADO"]
+jtorricoavila@gmail.com | insUsu["9876545","Jefe","Produccion","jtorricoavila+produccion@gmail.com","","PRODUCCION"]
+# usuarios de ejemplo con correos de terceros: se dan de baja para que no reciban los avisos (se reactivan con actUsu)
+jtorricoavila@gmail.com | eliUsu["7654321"]
+jtorricoavila@gmail.com | eliUsu["8888888"]
+jtorricoavila@gmail.com | eliUsu["9999999"]
+jtorricoavila@gmail.com | eliUsu["5555555"]
+jtorricoavila@gmail.com | lisUsu["*"]
+
+# Fase 2 - Catalogo de programas (CU2)
+jtorricoavila@gmail.com | insPro["Informe Once","Noticiero de la noche","NOTICIERO","60","Informativo","ATP"]
+jtorricoavila@gmail.com | insPro["Butaca Once","Pelicula de la noche","PELICULA","120","Cine","+13"]
+jtorricoavila@gmail.com | insPro["Deportivo 11","Revista deportiva","REVISTA","30","Deportes","ATP"]
+jtorricoavila@gmail.com | lisPro["*"]
+
+# Fase 3 - Materiales de video (CU4)
+jtorricoavila@gmail.com | insMat["IO-2011-01","Nota 1: titulares","PROGRAMA","Informe Once","300","MP4","/prensa/io_2011_01.mp4"]
+jtorricoavila@gmail.com | insMat["IO-2011-02","Nota 2: informe central","PROGRAMA","Informe Once","900","MP4","/prensa/io_2011_02.mp4"]
+jtorricoavila@gmail.com | insMat["IO-2011-03","Nota 3: cierre","PROGRAMA","Informe Once","600","MP4","/prensa/io_2011_03.mp4"]
+jtorricoavila@gmail.com | insMat["BUT-2011","Pelicula del 20 de noviembre","PROGRAMA","Butaca Once","6900","MP4","/cine/but_2011.mp4"]
+jtorricoavila@gmail.com | insMat["BUT-2012","Pelicula de reemplazo","PROGRAMA","Butaca Once","6600","MP4","/cine/but_2012.mp4"]
+jtorricoavila@gmail.com | insMat["DEP-2011","Deportivo 11 del 20 de noviembre","PROGRAMA","Deportivo 11","1500","MP4","/prensa/dep_2011.mp4"]
+jtorricoavila@gmail.com | insMat["SPOT-BSOL-02","Spot Navidad Banco Sol 30 s","SPOT","","30","MOV","/spots/bsol_02.mov"]
+jtorricoavila@gmail.com | lisMat["PENDIENTE"]
+
+# Fase 4 - Validacion (CU5): Prensa aprueba lo que registro Programacion (quien registra no puede aprobar)
+jtorricoavila+prensa@gmail.com | valMat["IO-2011-01","APROBADO","Listo para aire"]
+jtorricoavila+prensa@gmail.com | valMat["IO-2011-02","APROBADO","Listo para aire"]
+jtorricoavila+prensa@gmail.com | valMat["IO-2011-03","APROBADO","Listo para aire"]
+jtorricoavila+prensa@gmail.com | valMat["BUT-2011","APROBADO","Audio y video correctos"]
+jtorricoavila+prensa@gmail.com | valMat["BUT-2012","APROBADO","Audio y video correctos"]
+jtorricoavila+prensa@gmail.com | valMat["SPOT-BSOL-02","APROBADO","Spot correcto"]
+# rechazo a proposito (el comando sale bien): se corrige el archivo y se aprueba
+jtorricoavila+prensa@gmail.com | valMat["DEP-2011","RECHAZADO","Audio desfasado"]
+jtorricoavila@gmail.com | modMat["DEP-2011","Deportivo 11 del 20 de noviembre","PROGRAMA","Deportivo 11","1500","MP4","/prensa/dep_2011_v2.mp4"]
+jtorricoavila+prensa@gmail.com | valMat["DEP-2011","APROBADO","Audio corregido"]
+
+# Fase 5 - Parrilla del dia y escaleta del noticiero (CU3) - en real: antes de las 20:00
+jtorricoavila@gmail.com | insPar["2026-11-20"]
+jtorricoavila@gmail.com | insBlo["2026-11-20","20:00","21:00","PROGRAMA","Informe Once",""]
+jtorricoavila@gmail.com | insBlo["2026-11-20","21:00","21:05","PAUSA_COMERCIAL","",""]
+jtorricoavila@gmail.com | insBlo["2026-11-20","21:05","23:05","PROGRAMA","Butaca Once","BUT-2011"]
+jtorricoavila@gmail.com | insBlo["2026-11-20","23:05","23:35","PROGRAMA","Deportivo 11","DEP-2011"]
+jtorricoavila+prensa@gmail.com | insLea["2026-11-20","20:00","1","IO-2011-01"]
+jtorricoavila+prensa@gmail.com | insLea["2026-11-20","20:00","2","IO-2011-02"]
+jtorricoavila+prensa@gmail.com | insLea["2026-11-20","20:00","3","IO-2011-03"]
+jtorricoavila+prensa@gmail.com | modLea["2026-11-20","20:00","IO-2011-03","2"]
+jtorricoavila+prensa@gmail.com | lisLea["2026-11-20","20:00"]
+
+# Fase 6 - Pauta y spots (CU6)
+jtorricoavila@gmail.com | insPau["Navidad Banco Sol","Banco Sol","2026-11-20","2026-12-31","40"]
+jtorricoavila@gmail.com | insSpo["Navidad Banco Sol","SPOT-BSOL-02","2026-11-20","21:00","21:00:00"]
+jtorricoavila@gmail.com | insSpo["Navidad Banco Sol","SPOT-BSOL-01","2026-11-20","21:00","21:00:30"]
+jtorricoavila@gmail.com | mosPau["Navidad Banco Sol"]
+
+# Fase 7 - Revisar, publicar y cambio de ultimo momento (camBlo, en real: antes de las 21:05)
+jtorricoavila@gmail.com | estPar["2026-11-20"]
+jtorricoavila@gmail.com | pubPar["2026-11-20"]
+jtorricoavila@gmail.com | camBlo["2026-11-20","21:05","BUT-2012"]
+jtorricoavila@gmail.com | mosPar["2026-11-20"]
+
+# Fase 8 - Emision real (CU7) - en real: despues de las 23:35 (o al dia siguiente)
+@ahora 2026-11-20T23:40
+jtorricoavila+produccion@gmail.com | insEmi["2026-11-20","20:00","20:00:05","21:00:00","EMITIDO"]
+jtorricoavila+produccion@gmail.com | insEmi["2026-11-20","21:00","21:00:00","21:05:00","EMITIDO"]
+jtorricoavila+produccion@gmail.com | insEmi["2026-11-20","21:05","21:05:10","22:50:00","PARCIAL"]
+jtorricoavila+produccion@gmail.com | insEmi["2026-11-20","23:05","","","NO_EMITIDO"]
+jtorricoavila+produccion@gmail.com | conPar["2026-11-20"]
+jtorricoavila@gmail.com | lisAud["2026-11-20"]
+
+# Fase 9 - Reportes (CU8)
+jtorricoavila@gmail.com | repPro["2026-11-01","2026-11-30"]
+jtorricoavila@gmail.com | repMat["2026-11-01","2026-11-30"]
+jtorricoavila@gmail.com | repPau["2026-11-01","2026-11-30"]
+jtorricoavila@gmail.com | repCum["2026-11-01","2026-11-30"]
