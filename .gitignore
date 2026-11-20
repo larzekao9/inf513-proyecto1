@@ -1,0 +1,11 @@
+config.properties
+out/
+salida/
+*.class
+.idea/
+.vscode/
+*.iml
+.DS_Store
+logs/
+docs/
+README.md

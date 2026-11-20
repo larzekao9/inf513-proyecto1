@@ -1,0 +1,53 @@
+# Copiar este archivo como config.properties y completar las contrasenas.
+# config.properties NO se sube a git (esta en .gitignore).
+
+# --- Correo del grupo (servidor del curso) ---
+mail.usuario=grupo12sa
+mail.password=CAMBIAR
+mail.direccion=grupo12sa@tecnoweb.org.bo
+pop3.host=mail.tecnoweb.org.bo
+pop3.puerto=110
+smtp.host=mail.tecnoweb.org.bo
+smtp.puerto=25
+
+# --- Base de datos del grupo (servidor del curso) ---
+db.host=db.tecnoweb.org.bo
+db.puerto=5432
+db.nombre=db_grupo12sa
+db.usuario=grupo12sa
+db.password=CAMBIAR
+# Las tablas del sistema se crean en este esquema (separadas de otras tablas de la base)
+db.esquema=canal11
+
+# Cada cuantos segundos se revisa el buzon
+app.intervalo=10
+
+# --- Plazo de revision de materiales PENDIENTES (en minutos) ---
+# Si Prensa no valida un material (valMat) a tiempo: recordatorio a los ENCARGADO y luego aviso al ADMINISTRADOR.
+# 0 desactiva los avisos. Para una demostracion en vivo use valores cortos (ej. 2 y 4).
+revision.minutos_aviso=1440
+revision.minutos_escalar=2880
+# Cada cuantos segundos se revisan los plazos
+revision.intervalo=60
+
+# Los recordatorios de revision solo se envian dentro de este horario (hora del canal)
+revision.hora_desde=07:00
+revision.hora_hasta=21:00
+# Material RECHAZADO que nadie corrige: aviso a quien lo registro (minutos, 0 = desactivado)
+revision.correccion_minutos=2880
+
+# --- Alertas automaticas ---
+# Parrilla en riesgo (borrador o con materiales sin aprobar): aviso al Administrador (Programacion) X horas antes del dia
+# y urgente (con copia al administrador) Y horas antes. 0 = desactivado.
+alerta.parrilla_horas=24
+alerta.parrilla_urgente_horas=6
+# Bloque ya terminado sin emision registrada: aviso a Produccion pasados estos minutos (0 = desactivado)
+alerta.emision_minutos=30
+alerta.emision_ventana_horas=48
+# Avisos inmediatos por correo (parrilla publicada o cambiada, material validado, orden del noticiero)
+notificaciones.activas=true
+
+# --- Reloj ---
+app.zona=America/La_Paz
+# Solo pruebas/demostraciones: hora fija del sistema (formato 2031-01-01T10:00). Vacio = hora real.
+app.ahora=
